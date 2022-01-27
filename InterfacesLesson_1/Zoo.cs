@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Zoo_Project.ZooWorker;
 
 namespace Zoo_Project
 {
@@ -11,6 +12,7 @@ namespace Zoo_Project
     {
         private static System.Timers.Timer ZooTimer { get; set; } = new System.Timers.Timer();
         public Dictionary<int, Cage> ZooCages { get; private set; }
+        public Dictionary<int,ZooWorker.ZooWorker> ZooWorkers { get; private set;}
         public List<IFood> FoodsStorage { get; set; }
         public Dictionary<int, Animal> ZooAnimals { get; set; }
         public Zoo()

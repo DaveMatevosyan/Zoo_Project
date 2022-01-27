@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Zoo_Project
+﻿namespace Zoo_Project
 {
     public enum DoorState
     {
@@ -17,6 +11,7 @@ namespace Zoo_Project
         public int CageNumber { get; set; }
         public double CageArea { get; set; }
         public List<Animal> CageAnimal { get; set; } = new();
+        public List<IFood> FoodAnimal { get; set; } = new();
         public DoorState CageDoorState { get; set; }
         public Cage()
         {
