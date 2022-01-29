@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using Zoo_Project.ZooWorker;
+﻿using System.Timers;
 
 namespace Zoo_Project
 {
@@ -12,9 +6,9 @@ namespace Zoo_Project
     {
         private static System.Timers.Timer ZooTimer { get; set; } = new System.Timers.Timer();
         public Dictionary<int, Cage> ZooCages { get; private set; }
-        public Dictionary<int,ZooWorker.ZooWorker> ZooWorkers { get; private set;}
+        public Dictionary<int, ZooWorker.ZooWorker> ZooWorkers { get; private set; }
         public List<IFood> FoodsStorage { get; set; }
-        public Dictionary<int, Animal> ZooAnimals { get; set; }
+        public Dictionary<int, Animal> ZooAnimals { get; private set; }
         public Zoo()
         {
             ZooTimer.Elapsed += IsAliveCheker;
@@ -40,13 +34,13 @@ namespace Zoo_Project
                     //TODO Ամեն անգամ նույն ստուգումն անում ես ցիկլի ներսում
                     //if (ZooCages != null)
                     //{
-                    //    this.ZooCages.Add(cage.CageNumber, cage);
+                    this.ZooCages.Add(cage.CageID, cage);
                     //}
                     //else
                     //{
                     //    //TODO: Exception-ներում մեսիջներ գրի, որ հետո հեշտ գտնես
-                        throw new NullReferenceException("ZooCages is null");
-                  //  }
+                    //throw new NullReferenceException("ZooCages is null");
+                    //  }
                 }
                 catch (Exception ex)
                 {
@@ -88,8 +82,42 @@ namespace Zoo_Project
         }
         private void RemoveAnimalFromZoo(int AnimalID)
         {
+            ZooCages[ZooAnimals[AnimalID].CageID].DeleteAnimalFromCage(ZooAnimals[AnimalID]);
             this.ZooAnimals.Remove(AnimalID);
         }
-
+        public void AddAnimalToZoo(Animal animal)
+        {
+            try
+            {
+                int? cageID = FreeCages().First();
+                if (cageID != null)
+                {
+                    animal.CageID = (int)cageID;
+                    ZooCages[(int)cageID].CageAnimal.Add(animal);
+                    ZooAnimals.Add(animal.ID, animal);
+                }
+                else
+                {
+                    throw new Exception("No free cages.");
+                }
+            }
+            catch (Exception ex)
+            {
+                //Log exception
+                Console.WriteLine(ex.Message);
+            }
+        }
+        private List<int>? FreeCages()
+        {
+            List<int>? freeCages = new List<int>();
+            foreach (Cage cage in ZooCages.Values)
+            {
+                if (cage.CageAnimal.Count < 2)
+                {
+                    freeCages.Add(cage.CageID);
+                }
+            }
+            return freeCages;
+        }
     }
 }

@@ -8,11 +8,11 @@
             {
                 for (int i = 0; i < CageGeneratorCount; i++)
                 {
-                    (int CageNumber, double CageArea) CageParameters = CageParametersRandomGenerator();
-                    Cage Cage = new Cage(CageParameters.CageNumber,CageParameters.CageArea,DoorState.Close);
+                    (int CageID, double CageArea) CageParameters = CageParametersRandomGenerator();
+                    Cage Cage = new Cage(CageParameters.CageID,CageParameters.CageArea,DoorState.Close);
                     try
                     {
-                        myZoo.ZooCages.Add(Cage.CageNumber, Cage);
+                        myZoo.ZooCages.Add(Cage.CageID, Cage);
                     }
                     catch (Exception ex)
                     {

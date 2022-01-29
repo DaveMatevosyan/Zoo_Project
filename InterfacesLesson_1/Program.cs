@@ -13,17 +13,21 @@
 //lion1.IsAlive = false;
 //lion1.Feed(new Meat());
 //GC.Collect();
-
-Zoo myZoo = new Zoo();
-myZoo.CageGenerator(2);
-foreach (var item in myZoo.ZooCages)
+while (true)
 {
-    Console.WriteLine(item.Key);
-}
-myZoo.ZooAnimals.Add(1, new Lion("Simba", GenderType.Male));
-myZoo.ZooAnimals.First().Value.ID = 1;
-myZoo.ZooAnimals.First().Value.CageNumber = myZoo.ZooCages.First().Key;
+    Zoo myZoo = new Zoo();
+    myZoo.CageGenerator(2);
+    foreach (var item in myZoo.ZooCages)
+    {
+        Console.WriteLine(item.Key);
+    }
+    myZoo.AddAnimalToZoo(new Lion("Simba", GenderType.Male));
+    //myZoo.ZooAnimals.First().Value.ID = 1;
+    //myZoo.ZooAnimals.First().Value.CageID = myZoo.ZooCages.First().Key;
+    
+    Console.ReadLine();
 
+}
 
 
 

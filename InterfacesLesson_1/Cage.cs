@@ -8,20 +8,20 @@
 
     public class Cage
     {
-        public int CageNumber { get; set; }
+        public int CageID { get; set; }
         public double CageArea { get; set; }
-        public List<Animal> CageAnimal { get; set; } = new();
-        public List<IFood> FoodAnimal { get; set; } = new();
+        public List<Animal> CageAnimal { get; set; } = new(2);
+        public List<IFood> AvailableFood { get; set; } = new(2);
         public DoorState CageDoorState { get; set; }
         public Cage()
         {
-            this.CageNumber = -1;
+            this.CageID = -1;
             this.CageArea = -1;
             this.CageDoorState = DoorState.Close;
         }
-        public Cage(int CageNumber, double CageArea, DoorState CageDoorState)
+        public Cage(int CageID, double CageArea, DoorState CageDoorState)
         {
-            this.CageNumber = CageNumber;
+            this.CageID = CageID;
             this.CageArea = CageArea;
             this.CageDoorState = CageDoorState;
         }

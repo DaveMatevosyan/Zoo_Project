@@ -10,8 +10,8 @@ namespace Zoo_Project
 {
     public abstract class Animal
     {
-        public int ID { get; set; }
-        public int CageNumber { get; set; }
+        public int ID { get; set; } = 1;
+        public int CageID { get; set; }
         public string Name { get; set; }
         public GenderType Gender { get; set; } = GenderType.Male;
         public DateTime BirthDate { get; set; }
