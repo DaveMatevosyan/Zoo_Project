@@ -17,11 +17,14 @@ while (true)
 {
     Zoo myZoo = new Zoo();
     myZoo.CageGenerator(2);
+    myZoo.AnimalFeeded += myZoo.AnimalFeeded;
     foreach (var item in myZoo.ZooCages)
     {
         Console.WriteLine(item.Key);
     }
+    myZoo.AddWorkerToZoo();
     myZoo.AddAnimalToZoo(new Lion("Simba", GenderType.Male));
+    //myZoo.AddAnimalToZoo(new Lion("NoSimba", GenderType.Female));
     //myZoo.ZooAnimals.First().Value.ID = 1;
     //myZoo.ZooAnimals.First().Value.CageID = myZoo.ZooCages.First().Key;
     
@@ -32,6 +35,7 @@ while (true)
 
 
 Console.ReadLine();
+
 
 
 

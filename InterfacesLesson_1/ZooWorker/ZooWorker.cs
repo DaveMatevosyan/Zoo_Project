@@ -11,6 +11,7 @@ namespace Zoo_Project.ZooWorker
         public string Name { get; set; }
         public int ID { get; set; }
         public double Salary { get; set; }
+        public Zoo WorkersZoo { get; set; }
         public ZooWorker(string name, int ID, double Salary)
         {
             this.Name = name;

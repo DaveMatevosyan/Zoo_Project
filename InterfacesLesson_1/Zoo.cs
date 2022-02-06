@@ -1,4 +1,4 @@
-﻿using System.Timers;
+﻿using Zoo_Project.ZooWorker;
 
 namespace Zoo_Project
 {
@@ -7,17 +7,17 @@ namespace Zoo_Project
         private static System.Timers.Timer ZooTimer { get; set; } = new System.Timers.Timer();
         public Dictionary<int, Cage> ZooCages { get; private set; }
         public Dictionary<int, ZooWorker.ZooWorker> ZooWorkers { get; private set; }
-        public List<IFood> FoodsStorage { get; set; }
+        public List<IFood> FoodsStorage { get; set; } = new List<IFood> { new Meat(), new Meat(), new Meat(), new Meat(), new Meat(), new Meat(), new Meat() };
         public Dictionary<int, Animal> ZooAnimals { get; private set; }
+        public Action<string> AnimalFeeded { get; set; }
         public Zoo()
         {
-            ZooTimer.Elapsed += IsAliveCheker;
-            ZooTimer.Elapsed += GettingHungry;
             ZooTimer.Enabled = true;
             ZooTimer.AutoReset = true;
             this.ZooCages = new();
-            this.FoodsStorage = new();
+            //this.FoodsStorage = new();
             this.ZooAnimals = new();
+            this.ZooWorkers = new();
         }
         public Zoo(params Cage[] ZooCages) : base()
         {
@@ -31,16 +31,7 @@ namespace Zoo_Project
             {
                 try
                 {
-                    //TODO Ամեն անգամ նույն ստուգումն անում ես ցիկլի ներսում
-                    //if (ZooCages != null)
-                    //{
                     this.ZooCages.Add(cage.CageID, cage);
-                    //}
-                    //else
-                    //{
-                    //    //TODO: Exception-ներում մեսիջներ գրի, որ հետո հեշտ գտնես
-                    //throw new NullReferenceException("ZooCages is null");
-                    //  }
                 }
                 catch (Exception ex)
                 {
@@ -49,40 +40,9 @@ namespace Zoo_Project
                 }
             }
         }
-        //TODO: ZOO-ն չպետքա կենդանուն սովածացնի, սա պետք ա լինի կենդանու ներսում։
-        public void GettingHungry(Object source, ElapsedEventArgs e)
+        public void RemoveAnimalFromZoo(int AnimalID)
         {
-            try
-            {
-                foreach (var animal in ZooAnimals.Values)
-                {
-                    animal.GettingHungry();
-                    Console.WriteLine(animal.Stomach.StomatchFullness + " stomatch fullness.");
-                    Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}", e.SignalTime);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-        //TODO սա նույնպես կարա լինի կենդանու ներսում
-        private void IsAliveCheker(Object source, ElapsedEventArgs e)
-        {
-            foreach (Animal animal in ZooAnimals.Values)
-            {
-                if (animal.Stomach.StomatchFullness == 0 && animal.IsAlive)
-                {
-                    animal.DeathDate = DateTime.Now;
-                    animal.IsAlive = false;
-                    RemoveAnimalFromZoo(animal.ID);
-                    Console.WriteLine(animal.Name + " is dead. Death time is - " + animal.DeathDate + ". Age - " + (animal.DeathDate - animal.BirthDate));
-                }
-            }
-        }
-        private void RemoveAnimalFromZoo(int AnimalID)
-        {
-            ZooCages[ZooAnimals[AnimalID].CageID].DeleteAnimalFromCage(ZooAnimals[AnimalID]);
+            ZooCages[ZooAnimals[AnimalID].AnimalsCage.CageID].DeleteAnimalFromCage(ZooAnimals[AnimalID]);
             this.ZooAnimals.Remove(AnimalID);
         }
         public void AddAnimalToZoo(Animal animal)
@@ -92,9 +52,15 @@ namespace Zoo_Project
                 int? cageID = FreeCages().First();
                 if (cageID != null)
                 {
-                    animal.CageID = (int)cageID;
+                    animal.AnimalsCage = ZooCages[(int)cageID];
                     ZooCages[(int)cageID].CageAnimal.Add(animal);
                     ZooAnimals.Add(animal.ID, animal);
+                    animal.AnimalsZoo = this;
+                    AnimalCarer animalCarer = (AnimalCarer)ZooWorkers.FirstOrDefault().Value;
+                    if (animalCarer != null)
+                    {
+                        animal.CageFoodAdding += animalCarer.AddFoodToCage;
+                    }
                 }
                 else
                 {
@@ -107,9 +73,15 @@ namespace Zoo_Project
                 Console.WriteLine(ex.Message);
             }
         }
+        public void AddWorkerToZoo()
+        {
+            AnimalCarer animalCarer = new AnimalCarer("Steve", 1, 100);
+            animalCarer.WorkersZoo = this;
+            ZooWorkers.Add(animalCarer.ID, animalCarer);
+        }
         private List<int>? FreeCages()
         {
-            List<int>? freeCages = new List<int>();
+            List<int>? freeCages = new();
             foreach (Cage cage in ZooCages.Values)
             {
                 if (cage.CageAnimal.Count < 2)
@@ -118,6 +90,10 @@ namespace Zoo_Project
                 }
             }
             return freeCages;
+        }
+        public void DisplayActionInformation(string str)
+        {
+            Console.WriteLine(str);
         }
     }
 }

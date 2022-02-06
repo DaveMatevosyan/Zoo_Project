@@ -4,26 +4,27 @@
     {
         public AnimalCarer(string name, int ID, double salary) : base(name, ID, salary)
         {
-
+            
         }
-        public void AddFoodToCage(Zoo zoo, int cageID)
+        public void AddFoodToCage(int cageID)
         {
             try
             {
-                if (IsFoodsStorageEmpty(zoo.FoodsStorage))
+                if (IsFoodsStorageEmpty(WorkersZoo.FoodsStorage))
                 {
                     throw new Exception("No food available.");
                 }
                 else
                 {
-                    foreach (IFood food in zoo.FoodsStorage)
+                    foreach (IFood food in WorkersZoo.FoodsStorage)
                     {
-                        if (food.GetType() == zoo.ZooCages[cageID].CageAnimal.FirstOrDefault().Foods.FirstOrDefault().GetType())
+                        if (food.GetType() == WorkersZoo.ZooCages[cageID].CageAnimal.FirstOrDefault().Foods.FirstOrDefault().GetType())
                         {
-                            zoo.ZooCages[cageID].CageDoorState = DoorState.Open;
-                            zoo.ZooCages[cageID].AvailableFood.Add(food);
-                            zoo.ZooCages[cageID].CageDoorState = DoorState.Close;
-                            zoo.FoodsStorage.Remove(food);
+                            WorkersZoo.ZooCages[cageID].CageDoorState = DoorState.Open;
+                            WorkersZoo.ZooCages[cageID].AvailableFood.Add(food);
+                            WorkersZoo.ZooCages[cageID].CageDoorState = DoorState.Close;
+                            WorkersZoo.FoodsStorage.Remove(food);
+                            Console.WriteLine(food.GetType + " added to the cage with number: " + cageID);
                         }
                     }
                 }
@@ -46,18 +47,8 @@
             }
             return cagesWithoutFoods;
         }
-        //private List<Cage>? FoodMissingCages(Zoo zoo)
-        //{
-        //    List<Cage>? cages = null;
-        //    foreach (var cage in zoo.ZooCages)
-        //    {
-        //        if (cage.Value.AvailableFood.Count < 2)
-        //        {
-        //            cages.Add(cage.Value);
-        //        }
-        //    }
-        //    return cages;
-        //}
         private bool IsFoodsStorageEmpty(List<IFood> foods) => foods.Count == 0;
+
+
     }
 }

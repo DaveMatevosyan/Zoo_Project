@@ -1,7 +1,6 @@
-﻿using System.Timers;
-
-namespace Zoo_Project
+﻿namespace Zoo_Project
 {
+
     public class Stomach
     {
         private int hungrinessCoefficient = 50;
@@ -77,5 +76,9 @@ namespace Zoo_Project
             this.StomachCapacity = stomachCapacity;
             this.StomatchFullness = stomachFullness;
         }
+        public bool IsStomachEmpty() => this.StomatchFullness == 0 ? true : false;
+
+
+
     }
 }

@@ -25,5 +25,6 @@
             this.CageArea = CageArea;
             this.CageDoorState = CageDoorState;
         }
+        
     }
 }
